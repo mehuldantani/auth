@@ -23,7 +23,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 app.get("/",(req,res) => {
-     res.send("<H1>Authentication System</H1>");
+     return res.send("<H1>Authentication System</H1>");
  })
 
 app.post("/register", async (req,res) => {
@@ -33,7 +33,7 @@ app.post("/register", async (req,res) => {
         //validate the data
         if (!(email && password && lastname && firstname)){
             //send response with status code
-            res.status(402).send("All mandotary fields are not present.")
+            return res.status(402).send("All mandotary fields are not present.")
         }
 
         //check if user exists in the system with the emailid
@@ -41,7 +41,7 @@ app.post("/register", async (req,res) => {
 
         //if user exists then send response.
         if (userstatus){
-            res.status(402).send("Account exists with the same email. Please use SignIN option.")
+            return res.status(402).send("Account exists with the same email. Please use SignIN option.")
         }
 
         //encrypt the password
@@ -65,7 +65,7 @@ app.post("/register", async (req,res) => {
         useregister.password = undefined;
         useregister.token = token;
         //send respone
-        res.status(201).send(useregister)
+        return res.status(201).send(useregister)
 
     } catch (error) {
         console.log(error)
@@ -81,7 +81,7 @@ app.post("/login", async (req,res) => {
         //validate the data
         if (!(email && password)){
             //send response with status code
-            res.status(402).send("All mandotary fields are not present.")
+            return res.status(402).send("All mandotary fields are not present.")
         }
 
         //check if user is found
@@ -101,7 +101,7 @@ app.post("/login", async (req,res) => {
                     expires: new Date(Date.now() + 3*24*60*60*1000),
                     httponly: true
                 }
-                res.status(200).cookie("token",token,options).json({
+                return res.status(200).cookie("token",token,options).json({
                     success:true,
                     token,
                     userfound
@@ -109,13 +109,13 @@ app.post("/login", async (req,res) => {
 
             }else{
                 //invalid credentials
-                res.status(402).send("Invalid credentials.") 
+                return res.status(402).send("Invalid credentials.") 
             }
 
         }
         else{
             //account does not exists.
-            res.status(402).send("Please Create a account first.") 
+            return res.status(402).send("Please Create a account first.") 
         }
     } catch (error) {
         console.log(error);
@@ -124,12 +124,12 @@ app.post("/login", async (req,res) => {
 
 //dashboard
 app.get("/dashboard",auth, async (req,res) => {
-   res.send("Welcome to dashboard.")
+   return res.send("Welcome to dashboard.")
 })
 
 // Handle invalid routes
 app.use((req, res) => {
-  res.status(404).send('<H2>Page not found.</H2>');
+  return res.status(404).send('<H2>Page not found.</H2>');
 });
 
  module.exports = app
