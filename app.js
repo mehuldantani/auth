@@ -58,7 +58,7 @@ app.post("/register", async (req,res) => {
          //create a token and send it to user, send primary key created through create
          const token = jwt.sign({
             id: useregister._id,email
-        },process.env.secret,{expiresIn: '2h'})
+        },process.env.SECRET,{expiresIn: '2h'})
 
 
         //do not sent passwrod back to user
@@ -92,7 +92,7 @@ app.post("/login", async (req,res) => {
 
             //if password matches then send resp
             if (pwmatch) {
-               const token = jwt.sign({id: userfound._id,email},process.env.secret,{expiresIn: '2h'});
+               const token = jwt.sign({id: userfound._id,email},process.env.SECRET,{expiresIn: '2h'});
 
                userfound.password = undefined;
                userfound.token = token;

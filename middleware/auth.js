@@ -12,7 +12,7 @@ const auth = (req,res,next) => {
     }
 
     try {
-        const decodedtoken = jwt.verify(token,process.env.secret)
+        const decodedtoken = jwt.verify(token,process.env.SECRET)
         //this will generate the raw data from which the token was generated using sing method
         req.user = decodedtoken;
         
