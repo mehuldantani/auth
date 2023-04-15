@@ -62,8 +62,8 @@ app.post("/register", async (req,res) => {
 
 
         //do not sent passwrod back to user
-        user.password = undefined;
-
+        useregister.password = undefined;
+        useregister.token = token;
         //send respone
         res.status(201).send(useregister)
 
