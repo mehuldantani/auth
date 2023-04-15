@@ -15,7 +15,7 @@ const cookieParser = require('cookie-parser');
 const auth = require('./middleware/auth')
 //Import create model user
 
- const user = require("./models/user");
+ const User = require("./models/user");
 
 //to prase the incoming req in json format
 app.use(cookieParser());
@@ -37,7 +37,7 @@ app.post("/register", async (req,res) => {
         }
 
         //check if user exists in the system with the emailid
-        const userstatus = await user.findOne({email})
+        const userstatus = await User.findOne({email})
 
         //if user exists then send response.
         if (userstatus){
@@ -48,7 +48,7 @@ app.post("/register", async (req,res) => {
         const encryptedPW = await bcrypt.hash(password,10)
 
         //add entry in the database
-        const useregister = await user.create({
+        const useregister = await User.create({
             firstname,
             lastname,
             email,
@@ -57,7 +57,7 @@ app.post("/register", async (req,res) => {
 
          //create a token and send it to user, send primary key created through create
          const token = jwt.sign({
-            id: user._id,email
+            id: useregister._id,email
         },process.env.secret,{expiresIn: '2h'})
 
 
@@ -85,14 +85,14 @@ app.post("/login", async (req,res) => {
         }
 
         //check if user is found
-        const userfound = await user.findOne({email:email});
+        const userfound = await User.findOne({email:email});
         if (userfound){
             //match the password
             const pwmatch = await bcrypt.compare(password,userfound.password)
 
             //if password matches then send resp
             if (pwmatch) {
-               const token = jwt.sign({id: user._id,email},process.env.secret,{expiresIn: '2h'});
+               const token = jwt.sign({id: userfound._id,email},process.env.secret,{expiresIn: '2h'});
 
                userfound.password = undefined;
                userfound.token = token;
