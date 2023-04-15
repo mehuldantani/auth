@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
- app.get("/",(req,res) => {
+app.get("/",(req,res) => {
      res.send("<H1>Authentication System</H1>");
  })
 
@@ -126,5 +126,10 @@ app.post("/login", async (req,res) => {
 app.get("/dashboard",auth, async (req,res) => {
    res.send("Welcome to dashboard.")
 })
- 
+
+// Handle invalid routes
+app.use((req, res) => {
+  res.status(404).send('<H2>Page not found.</H2>');
+});
+
  module.exports = app
