@@ -7,20 +7,19 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const cookieParser = require('cookie-parser');
+const path = require('path');
+const auth = require('./middleware/auth')
+const User = require("./models/user");
 
 // //new instance of express
- const app = express();
-
-//customer middleware
-const auth = require('./middleware/auth')
-//Import create model user
-
- const User = require("./models/user");
+const app = express();
 
 //to prase the incoming req in json format
 app.use(cookieParser());
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+
+//app.use(express.static(path.join(__dirname, 'html_css')));
 
 app.get("/",(req,res) => {
      return res.send("<H1>Authentication System</H1>");
